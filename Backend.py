@@ -28,7 +28,7 @@ masterUsername = "username"
 # COMMON APIs
 ################################################################################################################
 
-# Show all customers
+# Show all Customers
 @app.route("/customer", methods=["GET"])
 def show_customers():
     sql = "SELECT * FROM Customer"
@@ -36,7 +36,7 @@ def show_customers():
     results = cursor.fetchall()
     return jsonify(results)
 
-# Show all employees
+# Show all Employees
 @app.route("/employees", methods=["GET"])
 def show_employees():
     sql = "SELECT * FROM Employee"
@@ -44,7 +44,7 @@ def show_employees():
     results = cursor.fetchall()
     return jsonify(results)
 
-# Show all services
+# Show all Services
 @app.route("/services", methods=["GET"])
 def show_service():
     sql = "SELECT * FROM Service"
@@ -339,7 +339,7 @@ def Customer_Retention():
     results = cursor.fetchall()
     return jsonify(results)
 
-# Ismael's Reports
+# Ismael"s Reports
 # Customer Base Location
 @app.route("/CustLocation", methods=["GET"])
 def Customer_Location():
@@ -367,7 +367,7 @@ def Customer_Location():
     results = cursor.fetchall()
     return jsonify(results)
 
-# Last Month's Service Order Report
+# Last Month"s Service Order Report
 @app.route("/SOReportMonth", methods=["GET"])
 def SO_Report_Month():
     sql = """
@@ -398,7 +398,7 @@ ORDER BY `Creation Date` DESC;
     results = cursor.fetchall()
     return jsonify(results)
 
-# Last Month's Referrals Service Order Revenue
+# Last Month"s Referrals Service Order Revenue
 @app.route("/RefferalsRevenue", methods=["GET"])
 def SO_Report_Month():
     sql = """
@@ -425,7 +425,7 @@ JOIN Service ON ServiceOrderLine.ServiceID = Service.ServiceID
 JOIN CustomerType ON Customer.CustomerCode = CustomerType.CustomerCode
 JOIN ServiceType ON Service.ServiceTypeID = ServiceType.ServiceTypeID
 
-WHERE PaymentTransaction.PaymentDate >= date_sub(curdate(), interval 1 MONTH) AND CustomerType.`Type` = 'Referral'
+WHERE PaymentTransaction.PaymentDate >= date_sub(curdate(), interval 1 MONTH) AND CustomerType.`Type` = "Referral"
 GROUP BY PaymentTransaction.TransactionID
 
 ORDER BY `Service Date` DESC;"""
@@ -435,7 +435,7 @@ ORDER BY `Service Date` DESC;"""
     return jsonify(results)
 
 
-#Mary's Reports
+#Mary"s Reports
 #Employee Incidents in a month
 @app.route("/EmpIncidentMonth", methods=["GET"])
 def Employee_incident_Month():
@@ -493,9 +493,126 @@ ORDER BY DB.Service.ServiceID ASC;
     return jsonify(results)
 
 # Completed Service Order Appointments for the Month
+@app.route("/MarchAppointments", methods=["GET"])
+def MarchServices():
+    sql = """
+SELECT
+DB.ServiceOrder.ServiceOrderID AS "Service Order No.",
+DB.ServiceOrder.ServiceOrderLineID AS "Service Order Line No.",
+CONCAT(DB.Employee.FirstName, " ", DB.Employee.LastName) AS "Employee Name",
+CONCAT(DB.Customer.FirstName, " ", DB.Customer.LastName) AS "Customer Name",
+DB.ServiceOrder.AppointmentTime AS "Appointment Time",
+DB.ServiceOrderStatus.StatusCode AS "Service Order Status Code",
+DB.ServiceOrderStatus.Status AS "Service Order Status"
+
+ 
+
+FROM DB.ServiceOrder
+JOIN DB.Customer ON DB.ServiceOrder.CustomerID = DB.Customer.CustomerID
+JOIN DB.ServiceOrderLine ON DB.ServiceOrder.ServiceOrderLineID = DB.ServiceOrderLine.ServiceOrderLineID
+JOIN DB.ServiceOrderStatus ON DB.ServiceOrder.StatusCode = DB.ServiceOrderStatus.StatusCode
+JOIN DB.Employee ON DB.ServiceOrderLine.EmployeeID = DB.Employee.EmployeeID
+
+ 
+
+WHERE month(DB.ServiceOrder.AppointmentTime)= 3
+
+ 
+
+ORDER BY DB.ServiceOrder.ServiceOrderID ASC;
+"""
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
+
+#Gabe"s Reports
+# Report 3: Customers Added in March Report
+@app.route("/NewCustomersMarch", methods=["GET"])
+def MarchServices():
+    sql = """
+SELECT 
+    DB.Customer.FirstName AS "Customer First Name",
+    DB.Customer.LastName AS "Customer Last Name",
+    DB.Customer.CustomerID AS "Customer ID",
+    DB.Customer.AddedDate AS "Date Added",
+    DB.Customer.StatusCode as "Customer Status Code",
+    DB.Customer.CustomerCode as "Customer Code",
+    DB.Customer.PostalCode as "Postal Code",
+    DB.CustomerStatus.Status as "Customer Status"
+    
+
+ 
+
+    
+FROM DB.Customer
+join DB.CustomerStatus ON DB.Customer.StatusCode=CustomerStatus.StatusCode
+join DB.CustomerType ON DB.Customer.CustomerCode=CustomerType.CustomerCode
+join DB.PostalCode ON DB.Customer.PostalCode=PostalCode.PostalCode
+
+ 
 
 
-#Gabe's Reports
+Where month (Customer.AddedDate)=3
+"""
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
+
+# Report 2: Service orderline reports by customer
+@app.route("/ServiceLineByCust", methods=["GET"])
+def MarchServices():
+    sql = """
+SELECT
+    DB.ServiceOrderLine.ServiceOrderLineID as "Service Order Line ID",
+    DB.ServiceOrderLine.Price as "Order Line Price",
+    DB.ServiceOrderLine.EmployeeID as "Employee ID",
+    DB.ServiceOrder.ServiceOrderID as "Service Order ID",
+    DB.ServiceOrder.CustomerID as "Customer ID",
+    DB.Customer.FirstName as "Customer First Name",
+    DB.Customer.LastName as "Customer Last Name"
+
+ 
+
+FROM DB.ServiceOrderLine
+join DB.Customer ON DB.Customer.CustomerID=Customer.CustomerID
+join DB.Service ON DB.ServiceOrderLine.Price=Service.Price
+join DB.ServiceOrder ON DB.ServiceOrderLine.ServiceOrderLineID=ServiceOrder.ServiceOrderLineID
+
+ 
+
+WHERE DB.ServiceOrder.CustomerID=1  
+"""
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
+
+# Report 1: Service orderline reports by customer
+@app.route("/CustomerServiceIncidents", methods=["GET"])
+def CustServiceIncidents():
+    sql = """
+SELECT
+    DB.ServiceOrderLine.ServiceOrderLineID as "Service Order Line ID",
+    DB.ServiceOrderLine.Price as "Order Line Price",
+    DB.ServiceOrderLine.EmployeeID as "Employee ID",
+    DB.ServiceOrder.ServiceOrderID as "Service Order ID",
+    DB.ServiceOrder.CustomerID as "Customer ID",
+    DB.Customer.FirstName as "Customer First Name",
+    DB.Customer.LastName as "Customer Last Name"
+
+ 
+
+FROM DB.ServiceOrderLine
+join DB.Customer ON DB.Customer.CustomerID=Customer.CustomerID
+join DB.Service ON DB.ServiceOrderLine.Price=Service.Price
+join DB.ServiceOrder ON DB.ServiceOrderLine.ServiceOrderLineID=ServiceOrder.ServiceOrderLineID
+
+ 
+
+WHERE DB.ServiceOrder.CustomerID=1  
+"""
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
 
 
 app.run()
