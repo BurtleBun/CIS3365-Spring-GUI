@@ -58,17 +58,27 @@ app.get('/', function(req, res) {
 
 // Customer Login page
 app.post('/customerlogin', function(req, res) {
-  var phoneNumber = req.body.phoneNumber;
+  axios.get('http://127.0.0.1:5000/CustomerLookup')
+  .then(response => {
+    const matchPhoneNumber = response.data.PrimaryPhoneNumber
+    var inputPhoneNumber = req.body.PrimaryPhoneNumber;
 
   let confirmLogin = 2;
-  if ((phoneNumber == employeeUsername)) {
+  if (inputPhoneNumber == matchPhoneNumber) {
     confirmLogin = 1;
-    res.redirect('/employee');
+    custInfo = response.data;
+    res.render('pages/selectservice.ejs', {custInfo: custInfo, checkLogin: confirmLogin})
   } 
   else {
       confirmLogin = 0;
-      res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
+      res.render('pages/index.ejs', {checkLogin: confirmLogin});
   }
+  })
+});
+
+ //Render Reports Page
+ app.get('/choosereports', function(req, res) {
+  res.render('pages/businessreports.ejs');
 });
 
   //Render Employee Login page
@@ -117,6 +127,20 @@ app.post('/employeelogin', function(req, res) {
       res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
   }
 });
+
+//Run the last month's revenue business report
+app.post('/lastMonthRevenueReport', function(req, res) {
+  axios.post('http://127.0.0.1:5000/showMonthRevenue')
+  .then((response) => {
+    const revenueData = response.data;
+
+    res.render('pages/lastmonthrevenue.ejs', {revenueData: revenueData});
+  })
+  .catch((error) => {
+    console.log(error)
+    res.status(500).send('Error fetching revenue data');
+  })
+  });
 
 //Employee Page (Overview)
 app.get('/employee', function(req, res) {
