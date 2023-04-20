@@ -75,6 +75,11 @@ app.post('/customerlogin', function(req, res) {
   })
 });
 
+ //Render Reports Page
+ app.get('/choosereports', function(req, res) {
+  res.render('pages/businessreports.ejs');
+});
+
   //Render Employee Login page
   app.get('/employeelogin', function(req, res) {
     res.render('pages/employeelogin.ejs');
@@ -121,6 +126,20 @@ app.post('/employeelogin', function(req, res) {
       res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
   }
 });
+
+//Run the last month's revenue business report
+app.post('/lastMonthRevenueReport', function(req, res) {
+  axios.post('http://127.0.0.1:5000/showMonthRevenue')
+  .then((response) => {
+    const revenueData = response.data;
+
+    res.render('pages/lastmonthrevenue.ejs', {revenueData: revenueData});
+  })
+  .catch((error) => {
+    console.log(error)
+    res.status(500).send('Error fetching revenue data');
+  })
+  });
 
 //Employee Page (Overview)
 app.get('/employee', function(req, res) {
