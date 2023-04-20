@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Define the API endpoints
 
 
-// Index/Home page
+// Home page
 app.get('/', function(req, res) {
   res.render('pages/index', { 
   });
@@ -72,6 +72,13 @@ app.get('/choosereports', function(req, res) {
   res.render('pages/choosereports', { 
   });
   });
+
+//New looks salon navbar button Page
+app.get('/index', function(req, res) {
+  res.render('pages/index', { 
+  });
+  });
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server started on port 3000');
