@@ -54,6 +54,12 @@ app.get('/employee', function(req, res) {
   });
   });
 
+//Welcome customer  Page
+app.get('/welcomecustomer', function(req, res) {
+  res.render('pages/welcomecustomer', { 
+  });
+  });
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server started on port 3000');
