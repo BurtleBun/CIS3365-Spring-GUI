@@ -25,7 +25,7 @@ masterPassword = "strongpassword123"
 masterUsername = 'username'
 
 # Show all employees in database
-@app.route('/', methods=['GET'])
+@app.route('/employees', methods=['GET'])
 def show_employees():
     sql = "SELECT * FROM Employee"
     cursor.execute(sql)
