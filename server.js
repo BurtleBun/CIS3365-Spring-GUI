@@ -67,6 +67,11 @@ app.get('/createserviceorder', function(req, res) {
   });
   });
 
+//Reports Page
+app.get('/choosereports', function(req, res) {
+  res.render('pages/choosereports', { 
+  });
+  });
 // Start the server
 app.listen(3000, () => {
   console.log('Server started on port 3000');
