@@ -57,17 +57,22 @@ app.get('/', function(req, res) {
 
 // Customer Login page
 app.post('/customerlogin', function(req, res) {
-  var phoneNumber = req.body.phoneNumber;
+  axios.get('http://127.0.0.1:5000/CustomerLookup')
+  .then(response => {
+    const matchPhoneNumber = response.data.PrimaryPhoneNumber
+    var inputPhoneNumber = req.body.PrimaryPhoneNumber;
 
   let confirmLogin = 2;
-  if ((phoneNumber == employeeUsername)) {
+  if (inputPhoneNumber == matchPhoneNumber) {
     confirmLogin = 1;
-    res.redirect('/employee');
+    custInfo = response.data;
+    res.render('pages/selectservice.ejs', {custInfo: custInfo, checkLogin: confirmLogin})
   } 
   else {
       confirmLogin = 0;
-      res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
+      res.render('pages/index.ejs', {checkLogin: confirmLogin});
   }
+  })
 });
 
   //Render Employee Login page

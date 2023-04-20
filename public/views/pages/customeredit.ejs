@@ -7,7 +7,7 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
     <%- include('../partials/header'); %>
     <main>
-        <h1 class="cover-heading">Edit Customer Status</h1>
+        <h1 class="cover-heading">Edit Customer</h1>
         <h7>
             Editing Information for Customer # <%= customerData[0].CustomerID %>
             <br>
@@ -53,61 +53,494 @@
                 </tbody>
             </table>
           </div>
-          <div class="row">
-            <select id="status-dropdown" class="form-select">
-                <option value="" selected disabled>Loading status options...</option>
-            </select>
-            <select id="country-dropdown" class="form-select">
-                <option value="" selected disabled>Loading country options...</option>
-            </select>
-            <script type="text/javascript">
-                // Define the API URL
-                const apiUrl = "http://127.0.0.1:5000/custStatus";
-            
-                // Fetch the data from the API and populate the dropdown
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        const dropdown = document.getElementById("status-dropdown");
-                        dropdown.innerHTML = "";
-            
-                        data.forEach(status => {
-                            const option = document.createElement("option");
-                            option.value = status.StatusCode;
-                            option.text = status.StatusCode;
-                            dropdown.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error("Error fetching status options:", error);
-                        const dropdown = document.getElementById("status-dropdown");
-                        dropdown.innerHTML = "<option value='' selected disabled>Error loading options</option>";
-                    });
-            </script>
-            <script type="text/javascript">
-                // Define the API URL
-                const apiUrl2 = "http://127.0.0.1:5000/country";
+          <div class="col mx-auto">
+            <div class="col-md-8 mb-4 mx-auto">
+                <!--Section: Checkout form-->
+                <section class="shadow-5 p-4 mx-auto">
+                  <form>
+                    <!-- 2 column grid layout with text inputs for the first and last names -->
+                    <div class="row mb-4">
+                      <div class="col">
+                        <div class="form-outline">
+                          <input
+                            type="text"
+                            id="form6Example1"
+                            class="form-control"
+                            style="
+                              background-repeat: no-repeat;
+                              background-attachment: scroll;
+                              background-size: 16px 18px;
+                              background-position: 98% 50%;
+                            "
+                            autocomplete="off"
+                          />
+                          <label
+                            class="form-label"
+                            for="form6Example1"
+                            style="margin-left: 0px"
+                            >First name</label
+                          >
+                          <div class="form-notch">
+                            <div
+                              class="form-notch-leading"
+                              style="width: 9px"
+                            ></div>
+                            <div
+                              class="form-notch-middle"
+                              style="width: 68.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                          </div>
+                          <div class="form-notch">
+                            <div
+                              class="form-notch-leading"
+                              style="width: 9px"
+                            ></div>
+                            <div
+                              class="form-notch-middle"
+                              style="width: 68.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-outline">
+                          <input
+                            type="text"
+                            id="form6Example2"
+                            class="form-control"
+                            autocomplete="off"
+                            style="
+                              background-repeat: no-repeat;
+                              background-attachment: scroll;
+                              background-size: 16px 18px;
+                              background-position: 98% 50%;
+                            "
+                          />
+                          <label
+                            class="form-label"
+                            for="form6Example2"
+                            style="margin-left: 0px"
+                            >Last name</label
+                          >
+                          <div class="form-notch">
+                            <div
+                              class="form-notch-leading"
+                              style="width: 9px"
+                            ></div>
+                            <div
+                              class="form-notch-middle"
+                              style="width: 68px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                          </div>
+                          <div class="form-notch">
+                            <div
+                              class="form-notch-leading"
+                              style="width: 9px"
+                            ></div>
+                            <div
+                              class="form-notch-middle"
+                              style="width: 68px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-                // Fetch the data from the API and populate the dropdown
-                fetch(apiUrl2)
-                    .then(response => response.json())
-                    .then(data => {
-                        const dropdown = document.getElementById("country-dropdown");
-                        dropdown.innerHTML = "";
+                    <!-- Text input -->
+                    <p><strong>Status</strong></p>
+                    <select id="status-dropdown" class="form-select">
+                        <option value="Status" selected disabled>Loading status options...</option>
+                    </select>
+                    <br>
 
-                        data.forEach(country => {
-                            const option = document.createElement("option");
-                            option.value = country.CountryID;
-                            option.text = country.CountryID;
-                            dropdown.appendChild(option);
+                    <!-- Text input -->
+                    <p><strong>Customer Type</strong></p>
+                    <select id="custType-dropdown" class="form-select">
+                        <option value="Status" selected disabled>Loading type options...</option>
+                    </select>
+                    <br>
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                      <input
+                        type="email"
+                        id="form6Example5"
+                        class="form-control"
+                        autocomplete="off"
+                        style="
+                          background-repeat: no-repeat;
+                          background-attachment: scroll;
+                          background-size: 16px 18px;
+                          background-position: 98% 50%;
+                        "
+                      />
+                      <label
+                        class="form-label"
+                        for="form6Example5"
+                        style="margin-left: 0px"
+                        >Added Date</label
+                      >
+                      <div class="form-notch">
+                        <div
+                          class="form-notch-leading"
+                          style="width: 9px"
+                        ></div>
+                        <div
+                          class="form-notch-middle"
+                          style="width: 40px"
+                        ></div>
+                        <div class="form-notch-trailing"></div>
+                      </div>
+                      <div class="form-notch">
+                        <div
+                          class="form-notch-leading"
+                          style="width: 9px"
+                        ></div>
+                        <div
+                          class="form-notch-middle"
+                          style="width: 40px"
+                        ></div>
+                        <div class="form-notch-trailing"></div>
+                      </div>
+                    </div>
+
+                    <!-- Number input -->
+                    <div class="form-outline mb-4">
+                      <input
+                        type="text"
+                        id="form6Example6"
+                        class="form-control"
+                      />
+                      <label
+                        class="form-label"
+                        for="form6Example6"
+                        style="margin-left: 0px"
+                        >Primary Phone</label
+                      >
+                      <div class="form-notch">
+                        <div
+                          class="form-notch-leading"
+                          style="width: 9px"
+                        ></div>
+                        <div
+                          class="form-notch-middle"
+                          style="width: 44.8px"
+                        ></div>
+                        <div class="form-notch-trailing"></div>
+                      </div>
+                      <div class="form-notch">
+                        <div
+                          class="form-notch-leading"
+                          style="width: 9px"
+                        ></div>
+                        <div
+                          class="form-notch-middle"
+                          style="width: 44.8px"
+                        ></div>
+                        <div class="form-notch-trailing"></div>
+                      </div>
+                    </div>
+
+                    <!-- Message input -->
+                    <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="form6Example6"
+                          class="form-control"
+                        />
+                        <label
+                          class="form-label"
+                          for="form6Example6"
+                          style="margin-left: 0px"
+                          >Secondary Phone</label
+                        >
+                        <div class="form-notch">
+                          <div
+                            class="form-notch-leading"
+                            style="width: 9px"
+                          ></div>
+                          <div
+                            class="form-notch-middle"
+                            style="width: 44.8px"
+                          ></div>
+                          <div class="form-notch-trailing"></div>
+                        </div>
+                        <div class="form-notch">
+                          <div
+                            class="form-notch-leading"
+                            style="width: 9px"
+                          ></div>
+                          <div
+                            class="form-notch-middle"
+                            style="width: 44.8px"
+                          ></div>
+                          <div class="form-notch-trailing"></div>
+                        </div>
+                      </div>
+
+                        <!-- Message input -->
+                        <div class="form-outline mb-4">
+                            <input
+                            type="text"
+                            id="form6Example6"
+                            class="form-control"
+                            />
+                            <label
+                            class="form-label"
+                            for="form6Example6"
+                            style="margin-left: 0px"
+                            >Email</label
+                            >
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                        </div>
+
+                        <!-- Message input -->
+                        <div class="form-outline mb-4">
+                            <input
+                            type="text"
+                            id="form6Example6"
+                            class="form-control"
+                            />
+                            <label
+                            class="form-label"
+                            for="form6Example6"
+                            style="margin-left: 0px"
+                            >Address Line 1</label
+                            >
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                        </div>
+
+                        <!-- Message input -->
+                        <div class="form-outline mb-4">
+                            <input
+                            type="text"
+                            id="form6Example6"
+                            class="form-control"
+                            />
+                            <label
+                            class="form-label"
+                            for="form6Example6"
+                            style="margin-left: 0px"
+                            >Address Line 2</label
+                            >
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                        </div>
+
+                        <!-- Message input -->
+                        <div class="form-outline mb-4">
+                            <input
+                            type="text"
+                            id="form6Example6"
+                            class="form-control"
+                            />
+                            <label
+                            class="form-label"
+                            for="form6Example6"
+                            style="margin-left: 0px"
+                            >PostalCode</label
+                            >
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                            <div class="form-notch">
+                            <div
+                                class="form-notch-leading"
+                                style="width: 9px"
+                            ></div>
+                            <div
+                                class="form-notch-middle"
+                                style="width: 44.8px"
+                            ></div>
+                            <div class="form-notch-trailing"></div>
+                            </div>
+                        </div>
+
+                        <p><strong>State ID</strong></p>
+                        <select id="state-dropdown" class="form-select">
+                            <option value="" selected disabled>Loading state options...</option>
+                        </select>
+                        <br>
+
+
+                        <p><strong>Country ID</strong></p>
+                        <select id="country-dropdown" class="form-select">
+                            <option value="" selected disabled>Loading country options...</option>
+                        </select>   
+                        <br>
+
+                    <!-- Submit button -->
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-block mb-4"
+                    >
+                      Confrim Changes
+                    </button>
+                  </form>
+                </section>
+                <!--Section: Checkout form-->
+              </div>
+          </div>
+          <div class="btn-group">
+            
+                <script type="text/javascript">
+                    // Define the API URLs
+                    const statusApiUrl = "http://127.0.0.1:5000/custStatus";
+                    const countryApiUrl = "http://127.0.0.1:5000/country";
+                    const stateApiUrl = "http://127.0.0.1:5000/state";
+                    const custTypeApiUrl = "http://127.0.0.1:5000/custType";
+                
+                    // Function to fetch data from the API and cache it
+                    const fetchData = (apiUrl, cacheKey) => {
+                        // Check if data is already in cache
+                        const cachedData = localStorage.getItem(cacheKey);
+                        if (cachedData) {
+                            return Promise.resolve(JSON.parse(cachedData));
+                        }
+                
+                        // Fetch data from API and store in cache
+                        return fetch(apiUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                localStorage.setItem(cacheKey, JSON.stringify(data));
+                                return data;
+                            })
+                            .catch(error => {
+                                console.error(`Error fetching ${cacheKey} options:`, error);
+                                return [];
+                            });
+                    };
+
+                    // Fetch the state options and populate the dropdown
+                    fetchData(stateApiUrl, "stateOptions")
+                        .then(data => {
+                            const dropdown = document.getElementById("state-dropdown");
+                            dropdown.innerHTML = "";
+
+                            data.forEach(state => {
+                                const option = document.createElement("option");
+                                option.value = state.StateID;
+                                option.text = state.StateID;
+                                dropdown.appendChild(option);
+                            });
                         });
-                    })
-                    .catch(error => {
-                        console.error("Error fetching country options:", error);
-                        const dropdown = document.getElementById("country-dropdown");
-                        dropdown.innerHTML = "<option value='' selected disabled>Error loading options</option>";
-                    });
-            </script>
+                
+                    // Fetch the status options and populate the dropdown
+                    fetchData(statusApiUrl, "statusOptions")
+                        .then(data => {
+                            const dropdown = document.getElementById("status-dropdown");
+                            dropdown.innerHTML = "";
+                
+                            data.forEach(status => {
+                                const option = document.createElement("option");
+                                option.value = status.StatusCode;
+                                option.text = status.StatusCode;
+                                dropdown.appendChild(option);
+                            });
+                        });
+                
+                    // Fetch the country options and populate the dropdown
+                    fetchData(countryApiUrl, "countryOptions")
+                        .then(data => {
+                            const dropdown = document.getElementById("country-dropdown");
+                            dropdown.innerHTML = "";
+                
+                            data.forEach(country => {
+                                const option = document.createElement("option");
+                                option.value = country.CountryID;
+                                option.text = country.CountryID;
+                                dropdown.appendChild(option);
+                            });
+                        });
+
+                    // Fetch the Customer Type options and populate the dropdown
+                    fetchData(custTypeApiUrl, "custTypeOptions")
+                        .then(data => {
+                            const dropdown = document.getElementById("custType-dropdown");
+                            dropdown.innerHTML = "";
+                    
+                            data.forEach(type => {
+                                const option = document.createElement("option");
+                                option.value = type.CustomerCode;
+                                option.text = type.CustomerCode;
+                                dropdown.appendChild(option);
+                            });
+                        });
+                </script>
 
           </div>
     </main>

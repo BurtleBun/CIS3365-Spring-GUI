@@ -52,6 +52,14 @@ def show_service():
     results = cursor.fetchall()
     return jsonify(results)
 
+# Show all Customer Types
+@app.route("/custType", methods=["GET"])
+def show_customer_type():
+    sql = "SELECT * FROM CustomerType"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
+
 # Show all Customer Statuses
 @app.route("/custStatus", methods=["GET"])
 def show_customer_status():
@@ -77,13 +85,14 @@ def country():
     return jsonify(results)
 
 # Customer Phone Lookup
-@app.route("/CustomerLookup", methods=["POST"])
+@app.route("/CustomerLookup", methods=["GET"])
 def CustomerLookup():
     requestData = request.get_json()
     Phone = requestData['PrimaryPhoneNumber']
-    sql = "SELECT * FROM Customer WHERE Customer.PrimaryPhoneNumber= %s" % (Phone)
+    sql = "SELECT * FROM Customer WHERE PrimaryPhoneNumber = %s"
 
-    cursor.execute(sql)
+    val = (Phone,)
+    cursor.execute(sql, val)
     results = cursor.fetchall()
     return jsonify(results)
 
