@@ -60,6 +60,13 @@ app.get('/customerwelcome', function(req, res) {
   });
   });
 
+
+//Service Order Page
+app.get('/createserviceorder', function(req, res) {
+  res.render('pages/createserviceorder', { 
+  });
+  });
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server started on port 3000');
