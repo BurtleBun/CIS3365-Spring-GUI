@@ -48,6 +48,7 @@ managerPassword = "manpass"
 // Define the API endpoints
 const customerAPI = 'http://127.0.0.1:5000/customer'
 const employeeAPI = 'http://127.0.0.1:5000/employees'
+const reportAPI = 'http://127.0.0.1:5000/MonthSOReport'
 
 // Home page
 app.get('/', function(req, res) {
@@ -143,6 +144,18 @@ app.get('/manager', function(req, res) {
     res.status(500).send('Error fetching employee data');
   })
   });
+
+  app.get('/reports', function(req, res) {
+    axios.get(reportsAPI)
+    .then((response) => {
+      const reportData = response.data;
+      res.render('pages/reports.ejs', {reportdata: reportData});
+    })
+    .catch((error) => {
+      console.log(error)
+      res.status(500).send('Error fetching customer data');
+    })
+    });
 
 
 

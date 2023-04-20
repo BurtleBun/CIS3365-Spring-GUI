@@ -1,74 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+ <!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <%- include('../partials/head'); %>
-</head>
-<body class="container text-center">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
-    <%- include('../partials/loginheader'); %>
+    <style>
+        main.container {
+        overflow: auto;
+        }
+        select[name='status'] {
+        width: 100%;
+        }
+    
+      </style>
+  </head>
+
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <%- include('../partials/header'); %>
     <main>
-        <h1 class="cover-heading">Welcome to LV Nail Salon</h1>
-        <h7>If you are a returning customer, please enter your phone number</h7>
-      <div class="row">
-            <form action="/customerlogin" method="post">
-                <div class="row justify-content-center">
-                  <div class="col-md-6 mb-4">
-
-                <!-- PhoneNumber input -->
-                <div class="form-outline mb-4">
-                    <input
-                    type="text"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    class="form-control"
-                    autocomplete="off"
-                    style="
-                        background-repeat: no-repeat;
-                        background-attachment: scroll;
-                        background-size: 16px 18px;
-                        background-position: 98% 50%;
-                    "
-                    />
-                    <label
-                    class="form-label"
-                    for="form2Example1"
-                    style="margin-left: 0px"
-                    required
-                    >Phone Number</label
-                    >
-                    <div class="form-notch">
-                    <div class="form-notch-leading" style="width: 9px"></div>
-                    <div
-                        class="form-notch-middle"
-                        style="width: 88.8px"
-                    ></div>
-                    <div class="form-notch-trailing"></div>
-                    </div>
-                </div>
-
-                      <!-- Submit button -->
-                      <input type="submit" class="btn btn-primary btn-block mb-4" value="Sign in">
-                  </form>
-        <div class="row">
-            <div class="form-outline mb-4">
-                New Customer? Sign up with us here
-                <br>
-                <form action="/signup" method="post">
-                    <button type="submit" class="btn btn-primary mb-4">Sign up</button>
-                </form>
-                
-            </div>
-        </div>
-      </div>
-
+      <h1 class="cover-heading">Service Orders in the Past Month</h1>
+      <table id="customerTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="border: 1px solid black; padding: 10px">Status</th>
+            <th style="border: 1px solid black; padding: 10px">ID</th>  
+            <th style="border: 1px solid black; padding: 10px">Date Placed</th>
+            <th style="border: 1px solid black; padding: 10px">First</th>
+            <th style="border: 1px solid black; padding: 10px">Last</th>
+            <th style="border: 1px solid black; padding: 10px">Customer Type</th>
+            <th style="border: 1px solid black; padding: 10px">Appointment</th>
+            <th style="border: 1px solid black; padding: 10px">Service</th>
+            <th style="border: 1px solid black; padding: 10px">Service Type</th>
+            <th style="border: 1px solid black; padding: 10px">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reportrow.forEach(function(reportrow) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= customer.CustomerID %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.StatusCode %>
+              </td>           
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= customer.CustomerCode %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= customer.AddedDate %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= customer.FirstName %>
+              <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.LastName %>
+              </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= customer.PrimaryPhoneNumber %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.SecondaryPhoneNumber %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.Email %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.AddressLine1 %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.AddressLine2 %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.StateID %>
+            </td> 
+              <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.PostalCode %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= customer.CountryID %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+                <form method="POST" action="/editCustomer">
+                  <input type="hidden" name="customerID" value="<%= customer.CustomerID %>">
+                  <button type="submit" id="editButton" style="color: black">Edit</button>
+                </form>              
+              </td>
+          </tr>
+          <% }); %>
+    
+          <!-- Empty row for user to input new customer -->
+          <tr id="newCaptainRow">
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+          </tr>
+        </tbody>
+      </table>
     </main>  
 
-    <% include('../partials/footer'); %>
+    <% include('../partials/footer'); %>       
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script>
+        const editButtons = document.querySelectorAll('button[type="submit"]');
+        editButtons.forEach((button) => {
+            button.addEventListener("click", function(event) {
+                event.preventDefault();
+                const customerID = event.target.parentElement.querySelector('input[type="hidden"]').value;
+                axios.post(`http://127.0.0.1:5000/customerLook`, {data: {CustomerID: customerID}})
+                    .then((response) => {
+                        // Render the edit page with the retrieved data
+                        res.render('pages/customeredit.ejs')(response.data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            });
+        });
+    </script>     -->
     </div>
-    <!-- MDB -->
-    <script type="text/javascript" src="/js/mdb.min.js"></script>
-    <!-- Custom scripts -->
-    <script type="text/javascript"></script>
   </body>
 </html>

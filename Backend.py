@@ -391,32 +391,9 @@ def Customer_Location():
     return jsonify(results)
 
 # Last Month"s Service Order Report
-@app.route("/SOReportMonth", methods=["GET"])
-def SO_Report_Month():
-    sql = """
-SELECT
-    ServiceOrderStatus.Status AS "Status",
-    ServiceOrder.ServiceOrderID AS "ServiceOrderID",
-    ServiceOrder.CreationDate AS "Creation Date",
-    Customer.FirstName AS "First Name",
-    Customer.LastName AS "Last Name",
-    CustomerType.`Type` AS "Customer Type",
-    ServiceOrder.AppointmentTime AS "Appointment",
-    Service.`Name` AS "Service",
-    ServiceType.ServiceType AS "Type",
-    ServiceOrderLine.Price AS "Price"
-FROM
-    ServiceOrder
-JOIN ServiceOrderLine ON ServiceOrder.ServiceOrderLineID = ServiceOrderLine.ServiceOrderLineID    
-JOIN ServiceOrderStatus ON ServiceOrder.StatusCode = ServiceOrderStatus.StatusCode
-JOIN Customer ON ServiceOrder.CustomerID = Customer.CustomerID
-JOIN Service ON ServiceOrderLine.ServiceID = Service.ServiceID
-JOIN CustomerType ON Customer.CustomerCode = CustomerType.CustomerCode
-JOIN ServiceType ON Service.ServiceTypeID = ServiceType.ServiceTypeID
-
-WHERE ServiceOrder.CreationDate >= date_sub(curdate(), interval 1 MONTH)
-ORDER BY `Creation Date` DESC;
-"""
+@app.route("/MonthSOReport", methods=["GET"])
+def MonthSOReport():
+    sql = "SELECT * FROM DB.`Monthly Service Orders`;"
     cursor.execute(sql)
     results = cursor.fetchall()
     return jsonify(results)
