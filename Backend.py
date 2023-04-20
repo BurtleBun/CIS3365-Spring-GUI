@@ -76,6 +76,29 @@ def country():
     results = cursor.fetchall()
     return jsonify(results)
 
+# Customer Phone Lookup
+@app.route("/CustomerLookup", methods=["POST"])
+def CustomerLookup():
+    requestData = request.get_json()
+    Phone = requestData['PrimaryPhoneNumber']
+    sql = "SELECT * FROM Customer WHERE Customer.PrimaryPhoneNumber= %s" % (Phone)
+
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
+
+# Customer Profile Lookup
+@app.route("/customerLook", methods=["POST"])
+def customerLook():
+    request_data = request.get_json()
+    setCustID = request_data['CustomerID']
+
+    value = [(setCustID)]
+    sql = "SELECT * FROM Customer WHERE CustomerID = %s"
+    cursor.execute(sql, value)
+    results = cursor.fetchall()
+    return jsonify(results)
+
 
 ################################################################################################################
 # BUSINESS REPORTS
@@ -399,8 +422,8 @@ ORDER BY `Creation Date` DESC;
     return jsonify(results)
 
 # Last Month"s Referrals Service Order Revenue
-@app.route("/RefferalsRevenue", methods=["GET"])
-def SO_Report_Month():
+@app.route("/ReferralsRevenue", methods=["GET"])
+def ReferralsRevenue():
     sql = """
 SELECT
     PaymentTransaction.TransactionID AS "TransactionID",
@@ -494,7 +517,7 @@ ORDER BY DB.Service.ServiceID ASC;
 
 # Completed Service Order Appointments for the Month
 @app.route("/MarchAppointments", methods=["GET"])
-def MarchServices():
+def MarchAppointments():
     sql = """
 SELECT
 DB.ServiceOrder.ServiceOrderID AS "Service Order No.",
@@ -528,7 +551,7 @@ ORDER BY DB.ServiceOrder.ServiceOrderID ASC;
 #Gabe"s Reports
 # Report 3: Customers Added in March Report
 @app.route("/NewCustomersMarch", methods=["GET"])
-def MarchServices():
+def NewMarchCustomers():
     sql = """
 SELECT 
     DB.Customer.FirstName AS "Customer First Name",
@@ -559,8 +582,8 @@ Where month (Customer.AddedDate)=3
     return jsonify(results)
 
 # Report 2: Service orderline reports by customer
-@app.route("/ServiceLineByCust", methods=["GET"])
-def MarchServices():
+@app.route("/CustomerServiceLine", methods=["GET"])
+def CustServiceLine():
     sql = """
 SELECT
     DB.ServiceOrderLine.ServiceOrderLineID as "Service Order Line ID",
@@ -613,6 +636,5 @@ WHERE DB.ServiceOrder.CustomerID=1
     cursor.execute(sql)
     results = cursor.fetchall()
     return jsonify(results)
-
 
 app.run()

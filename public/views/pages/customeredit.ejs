@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
+    <%- include('../partials/header'); %>
+    <main>
+        <h1 class="cover-heading">Edit Customer Status</h1>
+        <h7>
+            Editing Information for Customer # <%= customerData[0].CustomerID %>
+            <br>
+            Current Information:
+        </h7>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="font-weight:bold;">First Name</th>
+                        <th style="font-weight:bold;">Last Name</th>
+                        <th style="font-weight:bold;">Status</th>
+                        <th style="font-weight:bold;">Type</th>
+                        <th style="font-weight:bold;">AddedDate</th>
+                        <th style="font-weight:bold;">Primary Phone</th>
+                        <th style="font-weight:bold;">Secondary Phone</th>
+                        <th style="font-weight:bold;">Email</th>
+                        <th style="font-weight:bold;">Address 1</th>
+                        <th style="font-weight:bold;">Address 2</th>
+                        <th style="font-weight:bold;">StateID</th>
+                        <th style="font-weight:bold;">PostalCode</th>
+                        <th style="font-weight:bold;">CountryID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% customerData.forEach(function(customer) { %>
+                        <tr>
+                            <td><%= customer.FirstName %></td>
+                            <td><%= customer.LastName %></td>
+                            <td><%= customer.StatusCode %></td>
+                            <td><%= customer.CustomerCode %></td>
+                            <td><%= customer.AddedDate %></td>
+                            <td><%= customer.PrimaryPhoneNumber %></td>
+                            <td><%= customer.SecondaryPhoneNumber %></td>
+                            <td><%= customer.Email %></td>
+                            <td><%= customer.AddressLine1 %></td>
+                            <td><%= customer.AddressLine2 %></td>
+                            <td><%= customer.StateID %></td>
+                            <td><%= customer.PostalCode %></td>
+                            <td><%= customer.CountryID %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <select id="status-dropdown" class="form-select">
+                <option value="" selected disabled>Loading status options...</option>
+            </select>
+            <select id="country-dropdown" class="form-select">
+                <option value="" selected disabled>Loading country options...</option>
+            </select>
+            <script type="text/javascript">
+                // Define the API URL
+                const apiUrl = "http://127.0.0.1:5000/custStatus";
+            
+                // Fetch the data from the API and populate the dropdown
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const dropdown = document.getElementById("status-dropdown");
+                        dropdown.innerHTML = "";
+            
+                        data.forEach(status => {
+                            const option = document.createElement("option");
+                            option.value = status.StatusCode;
+                            option.text = status.StatusCode;
+                            dropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching status options:", error);
+                        const dropdown = document.getElementById("status-dropdown");
+                        dropdown.innerHTML = "<option value='' selected disabled>Error loading options</option>";
+                    });
+            </script>
+            <script type="text/javascript">
+                // Define the API URL
+                const apiUrl2 = "http://127.0.0.1:5000/country";
+
+                // Fetch the data from the API and populate the dropdown
+                fetch(apiUrl2)
+                    .then(response => response.json())
+                    .then(data => {
+                        const dropdown = document.getElementById("country-dropdown");
+                        dropdown.innerHTML = "";
+
+                        data.forEach(country => {
+                            const option = document.createElement("option");
+                            option.value = country.CountryID;
+                            option.text = country.CountryID;
+                            dropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching country options:", error);
+                        const dropdown = document.getElementById("country-dropdown");
+                        dropdown.innerHTML = "<option value='' selected disabled>Error loading options</option>";
+                    });
+            </script>
+
+          </div>
+    </main>
+
+    <!-- MDB -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>

@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dynamic Dropdown List</title>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script>
-		axios.get('http://127.0.0.1:5000/country')
-			.then(function (response) {
-				var countries = response.data;
-				var select = document.getElementById("country-select");
-				for(var i = 0; i < countries.length; i++) {
-					var option = document.createElement("option");
-					option.text = countries[i].Name;
-					select.add(option);
-				}
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-	</script>
+  <title>Dynamic Dropdown List Example</title>
 </head>
 <body>
-	<label for="country-select">Select a country:</label>
-	<select id="country-select"></select>
+  <h1>Dynamic Dropdown List Example</h1>
+  <form>
+    <label for="fruit-select">Choose a fruit:</label>
+    <select name="fruit" id="fruit-select">
+      <option value="">Select a fruit</option>
+    </select>
+  </form>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // Get a reference to the select element
+    const fruitDropdown = document.querySelector('#fruit-select');
+
+    // Make an AJAX request to the API endpoint that returns all fruits
+    axios.get('/fruits')
+      .then(response => {
+        // Loop through the fruits and add each one to the dropdown list
+        response.data.forEach(fruit => {
+          const option = document.createElement('option');
+          option.value = fruit;
+          option.text = fruit;
+          fruitDropdown.appendChild(option);
+        });
+      })
+      .catch(error => console.error(error));
+  </script>
 </body>
 </html>

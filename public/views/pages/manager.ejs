@@ -1,25 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <%- include('../partials/head'); %>
-</head>
-<body class="container">
+  </head>
+  <style>
+    main.container {
+    overflow: auto;
+    }
+    select[name='status'] {
+    width: 100%;
+    }
 
-    <header>
-        <%- include('../partials/header'); %>
-    </header>
-
+  </style>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <%- include('../partials/managerheader'); %>
     <main>
-        <div class="jumbotron">
-            <h1>Manager Page</h1>
-            <p>P</p>
+      <h1 class="cover-heading">Employees</h1>
+      <table id="employeeTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+            <tr>
+                <th style="border: 1px solid black; padding: 10px">ID</th>
+                <th style="border: 1px solid black; padding: 10px">First Name</th>  
+                <th style="border: 1px solid black; padding: 10px">Last Name</th>
+                <th style="border: 1px solid black; padding: 10px">Primary Phone</th>
+                <th style="border: 1px solid black; padding: 10px">Secondary Phone</th>
+                <th style="border: 1px solid black; padding: 10px">Email</th>
+                <th style="border: 1px solid black; padding: 10px">Address Line 1</th>
+                <th style="border: 1px solid black; padding: 10px">Address Line 2</th>
+                <th style="border: 1px solid black; padding: 10px">Start Date</th>
+                <th style="border: 1px solid black; padding: 10px">Postal Code</th>
+                <th style="border: 1px solid black; padding: 10px">StateID</th>
+                <th style="border: 1px solid black; padding: 10px">CountryID</th>
+                <th style="border: 1px solid black; padding: 10px">AccountID</th>
+                <th style="border: 1px solid black; padding: 10px">EmploymentCode</th>
+                <th style="border: 1px solid black; padding: 10px">StatusCode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% employees.forEach(function(employee) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= employee.EmployeeID %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.FirstName %>
+              </td>           
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= employee.LastName %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= employee.PrimaryPhoneNumber %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= employee.SecondaryPhoneNumber %>
+              <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.Email %>
+              </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= employee.AddressLine1 %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.AddressLine2 %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.StartDate %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.PostalCode %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.StateID %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.CountryID %>
+            </td> 
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.AccountID %>
+            </td> 
+              <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.EmploymentCode %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= employee.StatusCode %>
+            </td>
+          </tr>
+          <% }); %>
+    
+          <!-- Empty row for user to input new employee -->
+          <tr id="newCaptainRow">
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>  
 
-        </div>
-    </main>
+    <% include('../partials/footer'); %>       
 
-    <footer>
-        <%- include('../partials/footer'); %>
-    </footer>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const table = document.getElementById("employeeTable");
+      const rows = table.rows;
+      const lastRowIndex = rows.length - 1;
+    
+      table.addEventListener("blur", function (event) {
+        const cell = event.target;
+        const row = cell.parentElement;
+    
+        // Check if current row is not the last row
+        if (row.rowIndex !== lastRowIndex) {
+          const captainid = row.cells[0].innerText;
+          const captrank = row.cells[1].innerText;
+          const firstname = row.cells[2].innerText;
+          const lastname = row.cells[3].innerText;
+          const homeplanet = row.cells[4].innerText;
+    
+          axios
+            .put("http://127.0.0.1:5000/captain", {
+              captainid: captainid,
+              captrank: captrank,
+              firstname: firstname,
+              lastname: lastname,
+              homeplanet: homeplanet,
+            })
+            .then((response) => {})
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          // Get the data for the new captain
+          const captrank = row.cells[1].innerText;
+          const firstname = row.cells[2].innerText;
+          const lastname = row.cells[3].innerText;
+          const homeplanet = row.cells[4].innerText;
+    
+          // Check if all cells are filled
+          if (captrank && firstname && lastname && homeplanet) {
+            axios
+              .post("http://127.0.0.1:5000/captain", {
+                captrank: captrank,
+                firstname: firstname,
+                lastname: lastname,
+                homeplanet: homeplanet,
+              })
+              .then((response) => {
+                // Reload the page to see the updated table
+                location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        }
+      }, false);
+      const deleteButtons = document.querySelectorAll('button[type="submit"]');
 
-</body>
+    </script>
+    </div>
+  </body>
 </html>

@@ -47,6 +47,7 @@ managerPassword = "manpass"
 
 // Define the API endpoints
 const customerAPI = 'http://127.0.0.1:5000/customer'
+const employeeAPI = 'http://127.0.0.1:5000/employees'
 
 // Home page
 app.get('/', function(req, res) {
@@ -54,10 +55,47 @@ app.get('/', function(req, res) {
   });
   });
 
+// Customer Login page
+app.post('/customerlogin', function(req, res) {
+  var phoneNumber = req.body.phoneNumber;
+
+  let confirmLogin = 2;
+  if ((phoneNumber == employeeUsername)) {
+    confirmLogin = 1;
+    res.redirect('/employee');
+  } 
+  else {
+      confirmLogin = 0;
+      res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
+  }
+});
+
   //Render Employee Login page
   app.get('/employeelogin', function(req, res) {
     res.render('pages/employeelogin.ejs');
   });
+
+//Render CustomerEdit Page
+app.post("/editCustomer", function(req, res) {
+  var customerID = req.body.customerID;
+
+  // Make a POST request to your backend API to retrieve the customer data
+  axios.post('http://127.0.0.1:5000/customerLook', {
+    CustomerID: customerID
+  })
+  .then(function(response) {
+    // Render the edit page with the retrieved customer data
+    res.render("pages/customeredit.ejs", {
+      customerID: customerID,
+      customerData: response.data
+    });
+  })
+  .catch(function(error) {
+    console.log(error);
+    res.status(500).send('Error retrieving customer data');
+  });
+});
+
   
 //Employee Login Function
 app.post('/employeelogin', function(req, res) {
@@ -92,23 +130,21 @@ app.get('/employee', function(req, res) {
   })
   });
 
-//Customer Login
-app.get('/customerlogin', function(req, res) {
-  res.render('pages/customerwelcome', { 
-  });
+
+//Manager Page (Overview)
+app.get('/manager', function(req, res) {
+  axios.get(employeeAPI)
+  .then((response) => {
+    const allEmployees = response.data;
+    res.render('pages/manager.ejs', {employees: allEmployees});
+  })
+  .catch((error) => {
+    console.log(error)
+    res.status(500).send('Error fetching employee data');
+  })
   });
 
-//Reports Page
-app.get('/choosereports', function(req, res) {
-  res.render('pages/choosereports', { 
-  });
-  });
 
-//New looks salon navbar button Page
-app.get('/index', function(req, res) {
-  res.render('pages/index', { 
-  });
-  });
 
 // Start the server
 app.listen(3000, () => {
