@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dynamic Dropdown List</title>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		axios.get('http://127.0.0.1:5000/country')
+			.then(function (response) {
+				var countries = response.data;
+				var select = document.getElementById("country-select");
+				for(var i = 0; i < countries.length; i++) {
+					var option = document.createElement("option");
+					option.text = countries[i].Name;
+					select.add(option);
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	</script>
+</head>
+<body>
+	<label for="country-select">Select a country:</label>
+	<select id="country-select"></select>
+</body>
+</html>

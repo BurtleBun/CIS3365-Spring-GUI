@@ -5,27 +5,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        // Fetch country data from API
-        axios.get('/api/country')
-        .then(function(response) {
+        // Dynamically fill country dropdown list
+        axios.get('http://127.0.0.1:5000/country')
+        .then(function (response) {
             var countries = response.data;
-
-            // Create options for all the countries
-            var options = '';
-            countries.forEach(function(country) {
-            options += '<option value="' + country.CountryID + '">' + country.CountryName + '</option>';
-            });
-
-            // Populate country dropdown menus
-            var countryDropdowns = document.querySelectorAll('.country-dropdown');
-            countryDropdowns.forEach(function(dropdown) {
-            dropdown.innerHTML = options;
-            });
+            var select = document.getElementById("country-select");
+            for(var i = 0; i < countries.length; i++) {
+                var option = document.createElement("option");
+                option.text = countries[i].Name;
+                select.add(option);
+            }
         })
-        .catch(function(error) {
-            console.error(error);
+        .catch(function (error) {
+            console.log(error);
         });
-      </script>
+        
+    </script>
       
 
     <%- include('../partials/head'); %>
@@ -109,7 +104,7 @@
                 <%= customer.PostalCode %>
             </td>
             <td style="border: 1px solid black; padding: 10px">
-                <select class="form-select country-dropdown" aria-label="Default select example">
+                <select class="form-select" aria-label="Default select example" id="country-select">
                     <option selected disabled hidden><%= customer.CountryID %></option>
                   </select>                  
               </td>  

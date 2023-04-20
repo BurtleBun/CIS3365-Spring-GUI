@@ -50,7 +50,7 @@ const customerAPI = 'http://127.0.0.1:5000/customer'
 
 // Home page
 app.get('/', function(req, res) {
-  res.render('pages/index', { 
+  res.render('pages/index.ejs', { 
   });
   });
 
@@ -65,10 +65,15 @@ app.post('/employeelogin', function(req, res) {
   var inputPassword = req.body.password;
 
   let confirmLogin = 2;
-  if ((inputUsername == employeeUsername && inputPassword == employeePassword) || (inputUsername == managerUsername && inputPassword == managerPassword)) {
+  if ((inputUsername == employeeUsername && inputPassword == employeePassword)) {
     confirmLogin = 1;
     res.redirect('/employee');
-  } else {
+  } 
+  if (inputUsername == managerUsername && inputPassword == managerPassword) {
+    confirmLogin = 1;
+    res.redirect('manager');
+  }
+  else {
       confirmLogin = 0;
       res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
   }
