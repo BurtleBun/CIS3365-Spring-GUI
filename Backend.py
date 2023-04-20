@@ -398,7 +398,41 @@ ORDER BY `Creation Date` DESC;
     results = cursor.fetchall()
     return jsonify(results)
 
-#Ismael's 3rd Report
+# Last Month's Referrals Service Order Revenue
+@app.route("/RefferalsRevenue", methods=["GET"])
+def SO_Report_Month():
+    sql = """
+SELECT
+    PaymentTransaction.TransactionID AS "TransactionID",
+    ServiceOrder.ServiceOrderID AS "ServiceOrderID",
+	PaymentTransaction.OrderDate AS "Service Date",
+    Customer.FirstName AS "First Name",
+    Customer.LastName AS "Last Name",
+    CustomerType.`Type` AS "Customer Type",
+    Service.`Name` AS "Service",
+    Payment.Tip AS "Tip Amount",
+    PaymentTransaction.OverallTotal AS "Service Order Amount",
+    (PaymentTransaction.OverallTotal + Payment.Tip) AS "Total Order Revenue"
+    
+FROM
+	PaymentTransaction
+ 
+JOIN Payment ON PaymentTransaction.PaymentID = Payment.PaymentID
+JOIN Customer ON Payment.CustomerID = Customer.CustomerID
+JOIN ServiceOrder ON PaymentTransaction.ServiceOrderID = ServiceOrder.ServiceOrderID
+JOIN ServiceOrderLine ON ServiceOrder.ServiceOrderLineID = ServiceOrderLine.ServiceOrderLineID
+JOIN Service ON ServiceOrderLine.ServiceID = Service.ServiceID
+JOIN CustomerType ON Customer.CustomerCode = CustomerType.CustomerCode
+JOIN ServiceType ON Service.ServiceTypeID = ServiceType.ServiceTypeID
+
+WHERE PaymentTransaction.PaymentDate >= date_sub(curdate(), interval 1 MONTH) AND CustomerType.`Type` = 'Referral'
+GROUP BY PaymentTransaction.TransactionID
+
+ORDER BY `Service Date` DESC;"""
+
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
 
 
 #Mary's Reports
@@ -430,7 +464,33 @@ WHERE month(DB.EmployeeIncident.Date)=2
     return jsonify(results)
 
 # Specific Services done in a month
+@app.route("/MarchServices", methods=["GET"])
+def MarchServices():
+    sql = """
+SELECT
+DB.Service.ServiceID AS "Service No.",
+DB.Service.Name AS "Service Name",
+DB.Service.Abbreviation AS "Abbreviation",
+DB.ServiceStatus.Status AS "Service Status",
+DB.ServiceType.ServiceType AS "Type"
 
+ 
+
+FROM DB.Service
+JOIN DB.ServiceStatus ON DB.Service.StatusCode = DB.ServiceStatus.StatusCode
+JOIN DB.ServiceType ON DB.Service.ServiceTypeID = DB.ServiceType.ServiceTypeID
+JOIN DB.ServiceOrder ON DB.Service.StatusCode = DB.ServiceOrder.StatusCode
+JOIN DB.ServiceOrderLine ON DB.Service.ServiceID = DB.ServiceOrderLine.ServiceID
+
+ 
+
+WHERE month(DB.ServiceOrder.CreationDate) = 3
+GROUP BY DB.ServiceType.ServiceType
+ORDER BY DB.Service.ServiceID ASC;
+"""
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
 
 # Completed Service Order Appointments for the Month
 
