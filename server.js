@@ -55,8 +55,8 @@ app.get('/employee', function(req, res) {
   });
 
 //Welcome customer  Page
-app.get('/welcomecustomer', function(req, res) {
-  res.render('pages/welcomecustomer', { 
+app.get('/customerwelcome', function(req, res) {
+  res.render('pages/customerwelcome', { 
   });
   });
 
