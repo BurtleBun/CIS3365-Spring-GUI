@@ -19,3 +19,17 @@ CORS(app)
 myCreds = creds.Creds()
 conn = create_connection(myCreds.conString, myCreds.userName, myCreds.password, myCreds.dbName) 
 cursor = conn.cursor(dictionary = True)
+
+# authorized user login
+masterPassword = "strongpassword123"
+masterUsername = 'username'
+
+# Show all employees in database
+@app.route('/', methods=['GET'])
+def show_employees():
+    sql = "SELECT * FROM Employee"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    return jsonify(results)
+
+app.run()
