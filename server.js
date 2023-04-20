@@ -29,6 +29,9 @@ app.use(express.json());
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
 // Set the views directory to the public directory
 app.set('views', __dirname + '/public/views');
 
@@ -42,6 +45,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Index/Home page
 app.get('/', function(req, res) {
   res.render('pages/index', { 
+  });
+  });
+
+//Employees Page
+app.get('/employee', function(req, res) {
+  res.render('pages/employee', { 
   });
   });
 
