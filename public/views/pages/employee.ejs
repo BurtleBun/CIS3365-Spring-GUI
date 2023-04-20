@@ -1,25 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Fetch country data from API
+        axios.get('/api/country')
+        .then(function(response) {
+            var countries = response.data;
+
+            // Create options for all the countries
+            var options = '';
+            countries.forEach(function(country) {
+            options += '<option value="' + country.CountryID + '">' + country.CountryName + '</option>';
+            });
+
+            // Populate country dropdown menus
+            var countryDropdowns = document.querySelectorAll('.country-dropdown');
+            countryDropdowns.forEach(function(dropdown) {
+            dropdown.innerHTML = options;
+            });
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+      </script>
+      
+
     <%- include('../partials/head'); %>
-</head>
-<body class="container">
+  </head>
+  <style>
+    main.container {
+    overflow: auto;
+    }
+    select[name='status'] {
+    width: 100%;
+    }
 
-    <header>
-        <%- include('../partials/header'); %>
-    </header>
-
+  </style>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <%- include('../partials/header'); %>
     <main>
-        <div class="jumbotron">
-            <h1>Active Employees</h1>
-            <p>Here is who works here</p>
+      <h1 class="cover-heading">Customers</h1>
+      <table id="customerTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="border: 1px solid black; padding: 10px">ID</th>
+            <th style="border: 1px solid black; padding: 10px">Status</th>  
+            <th style="border: 1px solid black; padding: 10px">Type</th>
+            <th style="border: 1px solid black; padding: 10px">Added Date</th>
+            <th style="border: 1px solid black; padding: 10px">First</th>
+            <th style="border: 1px solid black; padding: 10px">Last</th>
+            <th style="border: 1px solid black; padding: 10px">Primary Phone #</th>
+            <th style="border: 1px solid black; padding: 10px">Secondary Phone #</th>
+            <th style="border: 1px solid black; padding: 10px">Email</th>
+            <th style="border: 1px solid black; padding: 10px">Address 1</th>
+            <th style="border: 1px solid black; padding: 10px">Address 2</th>
+            <th style="border: 1px solid black; padding: 10px">State</th>
+            <th style="border: 1px solid black; padding: 10px">PostalCode</th>
+            <th style="border: 1px solid black; padding: 10px">Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% customers.forEach(function(customer) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= customer.CustomerID %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+                <select class="form-select status-dropdown" aria-label="Default select example">
+                  <option selected disabled hidden><%= customer.StatusCode %></option>
+                </select>
+              </td>              
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= customer.CustomerCode %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= customer.AddedDate %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= customer.FirstName %>
+              <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= customer.LastName %>
+              </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= customer.PrimaryPhoneNumber %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= customer.SecondaryPhoneNumber %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= customer.Email %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= customer.AddressLine1 %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= customer.AddressLine2 %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+                <select class="form-select status-dropdown" aria-label="Default select example">
+                  <option selected disabled hidden><%= customer.StateID %></option>
+                </select>
+              </td>  
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= customer.PostalCode %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+                <select class="form-select country-dropdown" aria-label="Default select example">
+                    <option selected disabled hidden><%= customer.CountryID %></option>
+                  </select>                  
+              </td>  
+          </tr>
+          <% }); %>
+    
+          <!-- Empty row for user to input new customer -->
+          <tr id="newCaptainRow">
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>  
 
-        </div>
-    </main>
+    <% include('../partials/footer'); %>
 
-    <footer>
-        <%- include('../partials/footer'); %>
-    </footer>
+    <script>
+    // $(document).ready(function() {
+    // Make a request to the server to get the list of all possible status codes
+    // axios.get('http://127.0.0.1:5000/custStatus')
+    //     .then(function(response) {
+    //     // Generate the options for the dropdown list
+    //     var options = '';
+    //     response.data.forEach(function(status) {
+    //         options += '<option value="' + status.StatusCode + '">' + status.Status + '</option>';
+    //     });
+    
+    //     // Set the options for each status dropdown
+    //     $('.status-dropdown').html(options);
+    //     })
+    //     .catch(function(error) {
+    //     console.log(error);
+    //     });
 
-</body>
+    // // Populate State dropdown
+    // axios.get('http://127.0.0.1:5000/state')
+    //     .then(function(response) {
+    //     var options = '';
+    //     response.data.forEach(function(state) {
+    //         options += '<option value="' + state.StateID + '">' + state.StateName + '</option>';
+    //     });
+
+    //     // Set the options for the state dropdown
+    //     $('.state-dropdown').html(options);
+    //     })
+    //     .catch(function(error) {
+    //     console.log(error);
+    //     });
+
+    // Populate Country dropdown
+    // axios.get('http://127.0.0.1:5000/country')
+    //     .then(function(response) {
+    //     var options = '';
+    //     response.data.forEach(function(country) {
+    //         options += '<option value="' + country.CountryID + '">' + country.CountryName + '</option>';
+    //     });
+
+    //     // Set the options for the country dropdown
+    //     $('.country-dropdown').html(options);
+    //     })
+    //     .catch(function(error) {
+    //     console.log(error);
+    //     });
+    // });
+
+        </script>        
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const table = document.getElementById("customerTable");
+      const rows = table.rows;
+      const lastRowIndex = rows.length - 1;
+    
+      table.addEventListener("blur", function (event) {
+        const cell = event.target;
+        const row = cell.parentElement;
+    
+        // Check if current row is not the last row
+        if (row.rowIndex !== lastRowIndex) {
+          const captainid = row.cells[0].innerText;
+          const captrank = row.cells[1].innerText;
+          const firstname = row.cells[2].innerText;
+          const lastname = row.cells[3].innerText;
+          const homeplanet = row.cells[4].innerText;
+    
+          axios
+            .put("http://127.0.0.1:5000/captain", {
+              captainid: captainid,
+              captrank: captrank,
+              firstname: firstname,
+              lastname: lastname,
+              homeplanet: homeplanet,
+            })
+            .then((response) => {})
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          // Get the data for the new captain
+          const captrank = row.cells[1].innerText;
+          const firstname = row.cells[2].innerText;
+          const lastname = row.cells[3].innerText;
+          const homeplanet = row.cells[4].innerText;
+    
+          // Check if all cells are filled
+          if (captrank && firstname && lastname && homeplanet) {
+            axios
+              .post("http://127.0.0.1:5000/captain", {
+                captrank: captrank,
+                firstname: firstname,
+                lastname: lastname,
+                homeplanet: homeplanet,
+              })
+              .then((response) => {
+                // Reload the page to see the updated table
+                location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        }
+      }, true);
+      const deleteButtons = document.querySelectorAll('button[type="submit"]');
+
+deleteButtons.forEach((button) => {
+  button.addEventListener("click", function(event) {
+    event.preventDefault();
+    const captainId = event.target.parentElement.querySelector('input[type="hidden"]').value;
+
+    axios.delete('http://127.0.0.1:5000/captain', { data: { captainid: captainId } })
+  .then((response) => {
+    // Reload the page to see the updated table
+    location.reload();
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+  });
+});
+
+    </script>
+    </div>
+  </body>
 </html>

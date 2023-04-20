@@ -37,10 +37,16 @@ app.set('views', __dirname + '/public/views');
 
 // parse application/json
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Set Employee Accounts
+employeeUsername = "empuser"
+employeePassword = "emppass"
+managerUsername = "manuser"
+managerPassword = "manpass"
 
 // Define the API endpoints
-
+const customerAPI = 'http://127.0.0.1:5000/customer'
 
 // Home page
 app.get('/', function(req, res) {
@@ -48,22 +54,42 @@ app.get('/', function(req, res) {
   });
   });
 
-//Employees Page
+  //Render Employee Login page
+  app.get('/employeelogin', function(req, res) {
+    res.render('pages/employeelogin.ejs');
+  });
+  
+//Employee Login Function
+app.post('/employeelogin', function(req, res) {
+  var inputUsername = req.body.username;
+  var inputPassword = req.body.password;
+
+  let confirmLogin = 2;
+  if ((inputUsername == employeeUsername && inputPassword == employeePassword) || (inputUsername == managerUsername && inputPassword == managerPassword)) {
+    confirmLogin = 1;
+    res.redirect('/employee');
+  } else {
+      confirmLogin = 0;
+      res.render('pages/employeelogin.ejs', {checkLogin: confirmLogin});
+  }
+});
+
+//Employee Page (Overview)
 app.get('/employee', function(req, res) {
-  res.render('pages/employee', { 
-  });
+  axios.get(customerAPI)
+  .then((response) => {
+    const allCustomers = response.data;
+    res.render('pages/employee.ejs', {customers: allCustomers});
+  })
+  .catch((error) => {
+    console.log(error)
+    res.status(500).send('Error fetching customer data');
+  })
   });
 
-//Welcome customer  Page
-app.get('/customerwelcome', function(req, res) {
+//Customer Login
+app.get('/customerlogin', function(req, res) {
   res.render('pages/customerwelcome', { 
-  });
-  });
-
-
-//Service Order Page
-app.get('/createserviceorder', function(req, res) {
-  res.render('pages/createserviceorder', { 
   });
   });
 
