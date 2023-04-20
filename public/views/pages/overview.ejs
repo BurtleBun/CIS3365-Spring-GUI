@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Axios Library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <%- include('../partials/head'); %>
+    <title>Test</title>
+  </head>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
+    <%- include('../partials/header'); %>
+    <main>
+      <h1 class="cover-heading">Cargo in Transit</h1>
+      <p>View all cargo that is currently on their way and have <strong>NOT</strong> arrived yet</p>
+      <table id="myTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="border: 1px solid black; padding: 10px">ID</th>
+            <th style="border: 1px solid black; padding: 10px">Weight</th>
+            <th style="border: 1px solid black; padding: 10px">Type</th>
+            <th style="border: 1px solid black; padding: 10px">Departure</th>
+            <th style="border: 1px solid black; padding: 10px">Arrival</th>
+            <th style="border: 1px solid black; padding: 10px">Ship ID</th>
+
+            <section class="mb-4">
+                <form method="GET" action="/toggledOverview">
+                    <button type="submit" class="btn btn-success btn-rounded" data-mdb-ripple-color="dark" style="width: 50%;">Show Arrived</button>
+                </form>
+            </section>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cargo.forEach(function(cargo) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= cargo.id %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= cargo.weight %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= cargo.cargotype %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= cargo.departure %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= cargo.arrival %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+                <%= cargo.shipid %>
+              </td>
+          </tr>
+          <% }); %>
+    
+        </tbody>
+      </table>
+    </main>  
+
+    <% include('../partials/footer'); %>
+
+    </div>
+    <!-- MDB -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>

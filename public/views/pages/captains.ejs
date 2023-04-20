@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <%- include('../partials/header'); %>
+    <main>
+      <h1 class="cover-heading">Captains</h1>
+      <table id="captainTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="border: 1px solid black; padding: 10px">ID</th>
+            <th style="border: 1px solid black; padding: 10px">Rank</th>
+            <th style="border: 1px solid black; padding: 10px">First</th>
+            <th style="border: 1px solid black; padding: 10px">Last</th>
+            <th style="border: 1px solid black; padding: 10px">Home Planet</th>
+            <th style="border: 1px solid black; padding: 10px">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% captains.forEach(function(captain) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= captain.captainid %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= captain.captrank %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= captain.firstname %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= captain.lastname %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= captain.homeplanet %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+              <form method="DELETE" action="/deleteCaptain">
+                <input type="hidden" name="captainid" value="<%= captain.captainid %>">
+                <button type="submit" style="color: red">X</button>
+              </form>              
+            </td>
+          </tr>
+          <% }); %>
+    
+          <!-- Empty row for user to input new captain -->
+          <tr id="newCaptainRow">
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>  
+
+    <% include('../partials/footer'); %>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const table = document.getElementById("captainTable");
+      const rows = table.rows;
+      const lastRowIndex = rows.length - 1;
+    
+      table.addEventListener("blur", function (event) {
+        const cell = event.target;
+        const row = cell.parentElement;
+    
+        // Check if current row is not the last row
+        if (row.rowIndex !== lastRowIndex) {
+          const captainid = row.cells[0].innerText;
+          const captrank = row.cells[1].innerText;
+          const firstname = row.cells[2].innerText;
+          const lastname = row.cells[3].innerText;
+          const homeplanet = row.cells[4].innerText;
+    
+          axios
+            .put("http://127.0.0.1:5000/captain", {
+              captainid: captainid,
+              captrank: captrank,
+              firstname: firstname,
+              lastname: lastname,
+              homeplanet: homeplanet,
+            })
+            .then((response) => {})
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          // Get the data for the new captain
+          const captrank = row.cells[1].innerText;
+          const firstname = row.cells[2].innerText;
+          const lastname = row.cells[3].innerText;
+          const homeplanet = row.cells[4].innerText;
+    
+          // Check if all cells are filled
+          if (captrank && firstname && lastname && homeplanet) {
+            axios
+              .post("http://127.0.0.1:5000/captain", {
+                captrank: captrank,
+                firstname: firstname,
+                lastname: lastname,
+                homeplanet: homeplanet,
+              })
+              .then((response) => {
+                // Reload the page to see the updated table
+                location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        }
+      }, true);
+      const deleteButtons = document.querySelectorAll('button[type="submit"]');
+
+deleteButtons.forEach((button) => {
+  button.addEventListener("click", function(event) {
+    event.preventDefault();
+    const captainId = event.target.parentElement.querySelector('input[type="hidden"]').value;
+
+    axios.delete('http://127.0.0.1:5000/captain', { data: { captainid: captainId } })
+  .then((response) => {
+    // Reload the page to see the updated table
+    location.reload();
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+  });
+});
+
+    </script>
+    </div>
+  </body>
+</html>

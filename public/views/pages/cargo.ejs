@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <%- include('../partials/header'); %>
+    <main>
+      <h1 class="cover-heading">Registered Cargo</h1>
+      <table id="cargoTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="border: 1px solid black; padding: 10px">ID</th>
+            <th style="border: 1px solid black; padding: 10px">Weight</th>
+            <th style="border: 1px solid black; padding: 10px">Type</th>
+            <th style="border: 1px solid black; padding: 10px">Departure</th>
+            <th style="border: 1px solid black; padding: 10px">Arrival</th>
+            <th style="border: 1px solid black; padding: 10px">Ship ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cargo.forEach(function(cargo) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= cargo.id %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= cargo.weight %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= cargo.cargotype %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= cargo.departure %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= cargo.arrival %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+                <%= cargo.shipid %>
+              </td>
+            <td style="border: 1px solid black; padding: 10px">
+              <form method="DELETE" action="/deleteCargo">
+                <input type="hidden" name="cargoid" value="<%= cargo.id %>">
+                <button type="submit" style="color: red">X</button>
+              </form>              
+            </td>
+          </tr>
+          <% }); %>
+    
+          <!-- Empty row for user to input new captain -->
+          <tr id="newCargoRow">
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>  
+
+    <% include('../partials/footer'); %>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const table = document.getElementById("cargoTable");
+      const rows = table.rows;
+      const lastRowIndex = rows.length - 1;
+    
+      table.addEventListener("blur", function (event) {
+        const cell = event.target;
+        const row = cell.parentElement;
+    
+        // Check if current row is not the last row
+        if (row.rowIndex !== lastRowIndex) {
+          const cargoid = row.cells[0].innerText;
+          const weight = row.cells[1].innerText;
+          const cargotype = row.cells[2].innerText;
+          const departure = row.cells[3].innerText;
+          const arrival = row.cells[4].innerText;
+          const shipid = row.cells[4].innerText;
+    
+          axios
+            .put("http://127.0.0.1:5000/cargo", {
+              id: cargoid,
+              weight: weight,
+              cargotype: cargotype,
+              departure: departure,
+              arrival: arrival,
+              shipid: shipid
+            })
+            .then((response) => {})
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          // Get the data for the new cargo
+          const weight = row.cells[1].innerText;
+          const cargotype = row.cells[2].innerText;
+          const departure = row.cells[3].innerText;
+          const arrival = row.cells[4].innerText;
+          const shipid = row.cells[5].innerText;
+    
+          // Check if all cells are filled, then add new cargo
+          if (weight && cargotype && shipid) {
+            axios
+              .post("http://127.0.0.1:5000/cargo", {
+                weight: weight,
+                cargotype: cargotype,
+                departure: departure,
+                arrival: arrival,
+                shipid: shipid
+              })
+              .then((response) => {
+                // Reload the page to see the updated table
+                location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        }
+      }, true);
+      const deleteButtons = document.querySelectorAll('button[type="submit"]');
+
+deleteButtons.forEach((button) => {
+  button.addEventListener("click", function(event) {
+    event.preventDefault();
+    const cargoId = event.target.parentElement.querySelector('input[type="hidden"]').value;
+
+    axios.delete('http://127.0.0.1:5000/cargo', { data: { id: cargoId } })
+  .then((response) => {
+    // Reload the page to see the updated table
+    location.reload();
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+  });
+});
+
+    </script>
+    </div>
+  </body>
+</html>

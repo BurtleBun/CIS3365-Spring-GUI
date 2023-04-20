@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Axios Library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <%- include('../partials/loginhead'); %>
+    <title>Test</title>
+  </head>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
+    <%- include('../partials/loginheader'); %>
+    <main>
+      <h1 class="cover-heading">Login</h1>
+
+      <form action="/signin" method="post">
+      <div class="row justify-content-center">
+        <div class="col-md-6 mb-4">
+            <!-- Username input -->
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                autocomplete="off"
+                style="
+                  background-repeat: no-repeat;
+                  background-attachment: scroll;
+                  background-size: 16px 18px;
+                  background-position: 98% 50%;
+                "
+              />
+              <label
+                class="form-label"
+                for="form2Example1"
+                style="margin-left: 0px"
+                required
+                >Username</label
+              >
+              <div class="form-notch">
+                <div class="form-notch-leading" style="width: 9px"></div>
+                <div
+                  class="form-notch-middle"
+                  style="width: 88.8px"
+                ></div>
+                <div class="form-notch-trailing"></div>
+              </div>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                autocomplete="off"
+                required
+                style="
+                  background-repeat: no-repeat;
+                  background-attachment: scroll;
+                  background-size: 16px 18px;
+                  background-position: 98% 50%;
+                "
+              />
+              <label
+                class="form-label"
+                for="form2Example2"
+                style="margin-left: 0px"
+                >Password</label
+              >
+              <div class="form-notch">
+                <div class="form-notch-leading" style="width: 9px"></div>
+                <div class="form-notch-middle" style="width: 64px"></div>
+                <div class="form-notch-trailing"></div>
+              </div>
+            </div>
+
+            <!-- Wrong Login Notification -->
+            <%if (locals.checkLogin == 0) {%>
+              <p class="note note-danger">
+                <strong>Wrong login:</strong> try again please.
+              </p>
+            <% } %>
+            <!-- Submit button -->
+            <input type="submit" class="btn btn-primary btn-block mb-4">
+        </form>
+
+    </main>  
+
+    <% include('../partials/footer'); %>
+
+    </div>
+    <!-- MDB -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>

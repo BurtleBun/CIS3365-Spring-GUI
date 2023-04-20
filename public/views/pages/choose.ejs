@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+    <%- include('../partials/header'); %>
+</header>
+
+<main>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="jumbotron">
+            <% if (locals.music) { %>
+                <p>WE HAVE MUSIC</p>
+                Total Songs:
+                <%= locals.music.resultCount %>
+                <p>First song is: </p>
+                <p><%= locals.music.results[0].collectionName %></p>
+                <p>And it has the following description: </p>
+                <p><%= locals.music.results[0].description %></p>
+                
+                <% } %>
+            <br>
+            <% if (!locals.music) { %>
+                <p>WE HAVE NO MUSIC</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="well">
+            <h3>
+                SOMETHING ELSE COULD BE HERE
+            </h3>
+        </div>
+    </div>
+
+</div>
+</main>
+
+<footer>
+    <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>

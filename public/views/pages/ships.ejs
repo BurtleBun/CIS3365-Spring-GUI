@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <%- include('../partials/header'); %>
+    <main>
+      <h1 class="cover-heading">Registered Spaceships</h1>
+      <table id="shipsTable" style="border-collapse: collapse" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="border: 1px solid black; padding: 10px">ID</th>
+            <th style="border: 1px solid black; padding: 10px">Max Weight</th>
+            <th style="border: 1px solid black; padding: 10px">Captain ID</th>
+            <th style="border: 1px solid black; padding: 10px">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% ships.forEach(function(ships) { %>
+          <tr>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false">
+              <%= ships.shipid %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= ships.maxweight %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true">
+              <%= ships.captainid %>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+                <form method="DELETE" action="/deleteShip">
+                  <input type="hidden" name="shipid" value="<%= ships.shipid %>">
+                  <button type="submit" style="color: red">X</button>
+                </form>              
+              </td>
+          </tr>
+          <% }); %>
+    
+          <!-- Empty row for user to input new spaceship -->
+          <tr id="newShipRow">
+            <td style="border: 1px solid black; padding: 10px" contenteditable="false"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+            <td style="border: 1px solid black; padding: 10px" contenteditable="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>  
+
+    <% include('../partials/footer'); %>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const table = document.getElementById("shipsTable");
+      const rows = table.rows;
+      const lastRowIndex = rows.length - 1;
+    
+      table.addEventListener("blur", function (event) {
+        const cell = event.target;
+        const row = cell.parentElement;
+    
+        // Check if current row is not the last row
+        if (row.rowIndex !== lastRowIndex) {
+          const shipid = row.cells[0].innerText;
+          const maxweight = row.cells[1].innerText;
+          const captainid = row.cells[2].innerText;
+    
+          axios
+            .put("http://127.0.0.1:5000/ship", {
+              shipid: shipid,
+              maxweight: maxweight,
+              captainid: captainid
+            })
+            .then((response) => {})
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          // Get the data for the new captain
+          const maxweight = row.cells[1].innerText;
+          const captainid = row.cells[2].innerText;
+    
+          // Check if all cells are filled
+          if (maxweight && captainid) {
+            axios
+              .post("http://127.0.0.1:5000/ship", {
+                maxweight: maxweight,
+                captainid: captainid
+              })
+              .then((response) => {
+                // Reload the page to see the updated table
+                location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        }
+      }, true);
+      const deleteButtons = document.querySelectorAll('button[type="submit"]');
+
+deleteButtons.forEach((button) => {
+  button.addEventListener("click", function(event) {
+    event.preventDefault();
+    const shipID = event.target.parentElement.querySelector('input[type="hidden"]').value;
+
+    axios.delete('http://127.0.0.1:5000/ship', { data: { shipid: shipID } })
+  .then((response) => {
+    // Reload the page to see the updated table
+    location.reload();
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+  });
+});
+
+    </script>
+    </div>
+  </body>
+</html>

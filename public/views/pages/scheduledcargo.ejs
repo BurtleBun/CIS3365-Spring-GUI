@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> All Scheduled Cargo </title>
+</head>
+<body>
+    <h1>All Scheduled Cargo</h1>
+    <p>Login Successful! Here are all the cargo enroute</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Ship ID</th>
+                <th>Weight</th>
+                <th>Cargo Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% cargo.forEach(function(cargo) { %>
+            <tr>
+                <td><%= cargo.shipid %></td>
+                <td><%= cargo.weight %></td>
+                <td><%= cargo.cargotype %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <footer> bruh </footer>
+</body>
+</html>
