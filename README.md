@@ -5,4 +5,4 @@ For this project, we worked with LV Nail Salon to digitally transform their manu
 
 # Sample Photos
 *Unfortunately, the AWS server was shut down, and so not all rendered pages can be shown here, but the code and scripts still reside in the repository.*
-![CustomerSignupForm](Prjoect Images/CustomerSignUpForm.png)
+![CustomerSignupForm](Prjoect%20Images/CustomerSignUpForm.png)
