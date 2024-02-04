@@ -5,15 +5,14 @@ For this project, we worked with LV Nail Salon to digitally transform their manu
 
 ## Sample Photos
 *Unfortunately, the AWS server was shut down, and so not all rendered pages can be shown here, but the code and scripts still reside in the repository.*
-
-![CustomerSignupForm](Prjoect%20Images/Frontend%20HomePage.png)
 >Landing Page
+![CustomerSignupForm](Prjoect%20Images/Frontend%20HomePage.png)
 
-![Customer Signup Form](Prjoect%20Images/CustomerSignUpForm.png)
 >Signup Form where new customers register
+![Customer Signup Form](Prjoect%20Images/CustomerSignUpForm.png)
 
-![Employee Login](Prjoect%20Images/EmployeeLogin.png)
 >Employee login page to access employee dashboard
+![Employee Login](Prjoect%20Images/EmployeeLogin.png)
 
 
 # How it works
